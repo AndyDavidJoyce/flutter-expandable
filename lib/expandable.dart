@@ -514,17 +514,19 @@ class ExpandablePanel extends StatelessWidget {
           ),
           ExpandableIcon(theme: theme)
         ];
-        return GestureDetector(
-          onTap: () {
-            if (onHeaderClicked != null) {
-              onHeaderClicked!();
-            }
-          },
-          child: Row(
-            crossAxisAlignment: calculateHeaderCrossAxisAlignment(),
-            children: theme.iconPlacement! == ExpandablePanelIconPlacement.right ? rowChildren : rowChildren.reversed.toList(),
-          ),
-        );
+        return onHeaderClicked != null
+            ? GestureDetector(
+                onTap: onHeaderClicked,
+                child: Row(
+                  crossAxisAlignment: calculateHeaderCrossAxisAlignment(),
+                  children: theme.iconPlacement! == ExpandablePanelIconPlacement.right ? rowChildren : rowChildren.reversed.toList(),
+                ))
+            : wrapWithExpandableButton(
+                widget: Row(
+                  crossAxisAlignment: calculateHeaderCrossAxisAlignment(),
+                  children: theme.iconPlacement! == ExpandablePanelIconPlacement.right ? rowChildren : rowChildren.reversed.toList(),
+                ),
+                wrap: theme.tapHeaderToExpand!);
       }
     }
 
