@@ -464,6 +464,9 @@ class ExpandablePanel extends StatelessWidget {
   /// Builds an Expandable object, optional
   final ExpandableBuilder? builder;
 
+  /// Callback for when the header is clicked
+  final VoidCallback? onHeaderClicked;
+
   /// An optional controller. If not specified, a default controller will be
   /// obtained from a surrounding [ExpandableNotifier]. If that does not exist,
   /// the controller will be created with the initial state of [initialExpanded].
@@ -476,6 +479,7 @@ class ExpandablePanel extends StatelessWidget {
     this.header,
     required this.collapsed,
     required this.expanded,
+    this.onHeaderClicked,
     this.controller,
     this.builder,
     this.theme,
@@ -510,12 +514,17 @@ class ExpandablePanel extends StatelessWidget {
           ),
           ExpandableIcon(theme: theme)
         ];
-        return wrapWithExpandableButton(
-            widget: Row(
-              crossAxisAlignment: calculateHeaderCrossAxisAlignment(),
-              children: theme.iconPlacement! == ExpandablePanelIconPlacement.right ? rowChildren : rowChildren.reversed.toList(),
-            ),
-            wrap: theme.tapHeaderToExpand!);
+        return GestureDetector(
+          onTap: () {
+            if (onHeaderClicked != null) {
+              onHeaderClicked!();
+            }
+          },
+          child: Row(
+            crossAxisAlignment: calculateHeaderCrossAxisAlignment(),
+            children: theme.iconPlacement! == ExpandablePanelIconPlacement.right ? rowChildren : rowChildren.reversed.toList(),
+          ),
+        );
       }
     }
 
